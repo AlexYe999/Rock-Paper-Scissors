@@ -49,31 +49,28 @@ function playRound(playerSelection, computerSelection) {
 
 }
 
-//plays 5 rounds of rock, paper scissors, alerting the 
-//results of each round and returning the total results
-function game() {
-    let pTally = 0;
-    let cTally = 0;
-    for (let i = 0; i < 5; i++) {
-        let choice = prompt("Rock, paper or scissors?");
-        let result = playRound(choice, getComputerChoice());
-        alert(result);
-        while (result.toLowerCase().includes("invalid")) {
-            choice = prompt("Rock, paper or scissors?");
-            result = playRound(choice, getComputerChoice());
-            alert(result);
-        }
-        if (result.toLowerCase().includes("win")) {
-            pTally++;
-        } else if (result.toLowerCase().includes("lose")) {
-            cTally++;
-        }
+let playerScore = 0
+let computerScore = 0
+
+function eventListenerHelper(choice) {
+    let result = playRound(choice, getComputerChoice())
+    document.getElementById("end-round").innerHTML = result
+    if (result.toLowerCase().includes("win")) {
+        playerScore++;
+    } else if (result.toLowerCase().includes("lose")) {
+        computerScore++;
     }
-    if (pTally > cTally) {
-        return "You win! You beat the computer " + pTally + "-" + cTally + ".";
-    } else if (pTally < cTally) {
-        return "You lost! You computer beat you " + cTally + "-" + pTally + ".";
-    } else {
-        return "You drew! You won " + pTally + " times.";
+    document.getElementById("result").innerHTML = playerScore + '-' + computerScore
+    if (playerScore === 5 || computerScore === 5) {
+        if (playerScore === 5) document.getElementById("ending").innerHTML = "WOOHOO! You Won!"
+        if (computerScore === 5) document.getElementById("ending").innerHTML = "Bad Luck! You Lost."
+        let toHide = document.querySelectorAll('.play')
+        for (let i = 0; i < toHide.length; i++) {
+            toHide[i].style.display = "none";
+        }
     }
 }
+
+document.getElementById("rock").addEventListener("click", function () { eventListenerHelper("rock") });
+document.getElementById("paper").addEventListener("click", function () { eventListenerHelper("paper") });
+document.getElementById("scissors").addEventListener("click", function () { eventListenerHelper("scissors") });
